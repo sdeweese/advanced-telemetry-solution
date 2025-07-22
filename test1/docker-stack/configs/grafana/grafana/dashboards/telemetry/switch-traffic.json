@@ -1,0 +1,1020 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 22,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [
+        "interfaces"
+      ],
+      "targetBlank": false,
+      "title": "More interface data",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbQL"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Out/"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "$tag_switch $tag_direction",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbQL"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "select sum(mean) from(\n\tSELECT 8*mean(\"octetRate\") as mean FROM \"autogen\".\"sys/intf\" \n\tWHERE (\"type\"::tag = 'phys' AND \"switch\"::tag =~ /$Switch/ AND \"adminSt\"::tag = 'up') \n\tAND $timeFilter \n\tGROUP BY time($inter), \"switch\"::tag, \"interface\"::tag, \"direction\"::tag fill(null))\nWHERE $timeFilter\nGROUP BY time($inter), \"switch\"::tag, \"direction\"::tag fill(null)\n",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Interface Traffic",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbQL"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Out/"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "$tag_switch $tag_direction",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbQL"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "select sum(mean) from(\n\tSELECT mean(\"packetRate\") as mean FROM \"autogen\".\"sys/intf\" \n\tWHERE (\"type\"::tag = 'phys' AND \"switch\"::tag =~ /$Switch/ AND \"adminSt\"::tag = 'up') \n\tAND $timeFilter \n\tGROUP BY time($inter), \"switch\"::tag, \"interface\"::tag, \"direction\"::tag fill(null))\nWHERE $timeFilter\nGROUP BY time($inter), \"switch\"::tag, \"direction\"::tag fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Interface Packets",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbQL"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Out/"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 0,
+        "y": 14
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "$tag_switch $tag_direction",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbQL"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "select sum(rate) from (\n\tselect derivative(max, 1s) as rate from (\n\t\tSELECT max(broadcastPkts) as max \n\t\tFROM \"autogen\".\"sys/intf\" \n\t\tWHERE (\"type\"::tag = 'phys' AND \"switch\"::tag =~ /$Switch/ AND \"adminSt\"::tag = 'up') \n\t\tAND $timeFilter \n\t\tGROUP BY time($inter), \"switch\"::tag, \"interface\"::tag, \"direction\"::tag fill(null))\n\twhere $timeFilter GROUP BY \"switch\"::tag, \"interface\"::tag, \"direction\"::tag fill(null))\nwhere $timeFilter GROUP BY time($inter), \"switch\"::tag, \"direction\"::tag fill(null)\n",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Interface Broadcast",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbQL"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Out/"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 12,
+        "y": 14
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "$tag_switch $tag_direction",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbQL"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "select sum(rate) from (\n\tselect derivative(max, 1s) as rate from (\n\t\tSELECT max(multicastPkts) as max \n\t\tFROM \"autogen\".\"sys/intf\" \n\t\tWHERE (\"type\"::tag = 'phys' AND \"switch\"::tag =~ /$Switch/ AND \"adminSt\"::tag = 'up') \n\t\tAND $timeFilter \n\t\tGROUP BY time($inter), \"switch\"::tag, \"interface\"::tag, \"direction\"::tag fill(null))\n\twhere $timeFilter GROUP BY \"switch\"::tag, \"interface\"::tag, \"direction\"::tag fill(null))\nwhere $timeFilter GROUP BY time($inter), \"switch\"::tag, \"direction\"::tag fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Interface Multicast",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbQL"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Out/"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 0,
+        "y": 28
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "$tag_switch $tag_direction",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbQL"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "select sum(rate) from (\n\tselect derivative(max, 1s) as rate from (\n\t\tSELECT max(errors) as max \n\t\tFROM \"autogen\".\"sys/intf\" \n\t\tWHERE (\"type\"::tag = 'phys' AND \"switch\"::tag =~ /$Switch/ AND \"adminSt\"::tag = 'up') \n\t\tAND $timeFilter \n\t\tGROUP BY time($inter), \"switch\"::tag, \"interface\"::tag, \"direction\"::tag fill(null))\n\twhere $timeFilter GROUP BY \"switch\"::tag, \"interface\"::tag, \"direction\"::tag fill(null))\nwhere $timeFilter GROUP BY time($inter), \"switch\"::tag, \"direction\"::tag fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Interface Errors",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbQL"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Out/"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 12,
+        "y": 28
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "$tag_switch $tag_direction",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbQL"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "select sum(rate) from (\n\tselect derivative(max, 1s) as rate from (\n\t\tSELECT max(discards) as max \n\t\tFROM \"autogen\".\"sys/intf\" \n\t\tWHERE (\"type\"::tag = 'phys' AND \"switch\"::tag =~ /$Switch/ AND \"adminSt\"::tag = 'up') \n\t\tAND $timeFilter \n\t\tGROUP BY time($inter), \"switch\"::tag, \"interface\"::tag, \"direction\"::tag fill(null))\n\twhere $timeFilter GROUP BY \"switch\"::tag, \"interface\"::tag, \"direction\"::tag fill(null))\nwhere $timeFilter GROUP BY time($inter), \"switch\"::tag, \"direction\"::tag fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Interface Discards",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 40,
+  "tags": [
+    "interfaces"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allValue": "all",
+        "current": {
+          "text": [
+            "151 Front St W"
+          ],
+          "value": [
+            "151 Front St W"
+          ]
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdbFlux"
+        },
+        "definition": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> keep(columns: [\"building\"])\n  |> group()\n  |> distinct(column: \"building\")",
+        "includeAll": true,
+        "multi": true,
+        "name": "Building",
+        "options": [],
+        "query": {
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> keep(columns: [\"building\"])\n  |> group()\n  |> distinct(column: \"building\")"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "allValue": "all",
+        "current": {
+          "text": [
+            "514"
+          ],
+          "value": [
+            "514"
+          ]
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdbFlux"
+        },
+        "definition": "building = \"${Building}\"\nnoBuildings = building == \"all\"\n\nbase = from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n\nfiltered = base\n  |> filter(fn: (r) => r[\"building\"] =~ /${Building:regex}/)\n\nres = if noBuildings then base else filtered\n\nres\n  |> keep(columns: [\"suite\"])\n  |> group()\n  |> distinct(column: \"suite\")\n",
+        "includeAll": true,
+        "multi": true,
+        "name": "Suite",
+        "options": [],
+        "query": {
+          "query": "building = \"${Building}\"\nnoBuildings = building == \"all\"\n\nbase = from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n\nfiltered = base\n  |> filter(fn: (r) => r[\"building\"] =~ /${Building:regex}/)\n\nres = if noBuildings then base else filtered\n\nres\n  |> keep(columns: [\"suite\"])\n  |> group()\n  |> distinct(column: \"suite\")\n"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdbFlux"
+        },
+        "definition": "building = \"${Building}\"\nnoBuildings = building == \"all\"\n\nbase = from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n\nfilteredBuildings = base\n  |> filter(fn: (r) => r[\"building\"] =~ /${Building:regex}/)\n\nres = if noBuildings then base else filteredBuildings\n\nsuite = \"${Suite}\"\nnoSuites = suite == \"all\"\n\nfilteredSuites = res\n  |> filter(fn: (r) => r[\"suite\"] =~ /${Suite:regex}/)\n\nres2 = if noSuites then res else filteredSuites\n\nres2\n  |> keep(columns: [\"switch\"])\n  |> group()\n  |> distinct(column: \"switch\")\n",
+        "includeAll": true,
+        "multi": true,
+        "name": "Switch",
+        "options": [],
+        "query": {
+          "query": "building = \"${Building}\"\nnoBuildings = building == \"all\"\n\nbase = from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n\nfilteredBuildings = base\n  |> filter(fn: (r) => r[\"building\"] =~ /${Building:regex}/)\n\nres = if noBuildings then base else filteredBuildings\n\nsuite = \"${Suite}\"\nnoSuites = suite == \"all\"\n\nfilteredSuites = res\n  |> filter(fn: (r) => r[\"suite\"] =~ /${Suite:regex}/)\n\nres2 = if noSuites then res else filteredSuites\n\nres2\n  |> keep(columns: [\"switch\"])\n  |> group()\n  |> distinct(column: \"switch\")\n"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "auto": true,
+        "auto_count": 100,
+        "auto_min": "1m",
+        "current": {
+          "text": "auto",
+          "value": "$__auto_interval_inter"
+        },
+        "name": "inter",
+        "options": [
+          {
+            "selected": true,
+            "text": "auto",
+            "value": "$__auto_interval_inter"
+          },
+          {
+            "selected": false,
+            "text": "1m",
+            "value": "1m"
+          },
+          {
+            "selected": false,
+            "text": "10m",
+            "value": "10m"
+          },
+          {
+            "selected": false,
+            "text": "30m",
+            "value": "30m"
+          },
+          {
+            "selected": false,
+            "text": "1h",
+            "value": "1h"
+          },
+          {
+            "selected": false,
+            "text": "6h",
+            "value": "6h"
+          },
+          {
+            "selected": false,
+            "text": "12h",
+            "value": "12h"
+          },
+          {
+            "selected": false,
+            "text": "1d",
+            "value": "1d"
+          },
+          {
+            "selected": false,
+            "text": "7d",
+            "value": "7d"
+          },
+          {
+            "selected": false,
+            "text": "14d",
+            "value": "14d"
+          },
+          {
+            "selected": false,
+            "text": "30d",
+            "value": "30d"
+          }
+        ],
+        "query": "1m,10m,30m,1h,6h,12h,1d,7d,14d,30d",
+        "refresh": 2,
+        "type": "interval"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-12h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Switch Traffic",
+  "uid": "afdfc415-dff3-465c-aed6-81957e3e3fc6",
+  "version": 2,
+  "weekStart": ""
+}

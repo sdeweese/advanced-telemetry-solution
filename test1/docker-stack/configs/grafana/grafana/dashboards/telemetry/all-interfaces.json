@@ -1,0 +1,1998 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 23,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [
+        "interfaces"
+      ],
+      "targetBlank": false,
+      "title": "More interface data",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Out/"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 18,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"interface\"] =~ /^${Port:regex}$/)\n  |> filter(fn: (r) => r[\"dn\"] =~ /^.*\\/dbgIf(In|Out)$/)\n  |> filter(fn: (r) => r[\"_field\"] == \"octetRate\")\n  |> filter(fn: (r) => r[\"adminSt\"] == \"up\")\n  |> keep(columns: [\"_field\", \"_time\", \"_value\", \"interface\", \"dn\"])\n  |> map(fn: (r) => ({\n      r with \n      _value: r._value * 8\n    }))\n  |> aggregateWindow(every: ${inter}, fn: mean, createEmpty: true)\n  |> yield(name: \"mean\")\n",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Interface Traffic",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "octetRate {dn=\\\".*\\/dbgIf(In|Out)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$2 $1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "octetRate {customer=\\\"(.*)\\\", dn=\\\".*\\/dbgIf(In|Out)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$1 $3 $2"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Out/"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 18,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"interface\"] =~ /^${Port:regex}$/)\n  |> filter(fn: (r) => r[\"dn\"] =~ /^.*\\/dbgIf(In|Out)$/)\n  |> filter(fn: (r) => r[\"_field\"] == \"packetRate\")\n  |> filter(fn: (r) => r[\"adminSt\"] == \"up\")\n  |> keep(columns: [\"_field\", \"_time\", \"_value\", \"interface\", \"dn\"])\n  |> aggregateWindow(every: ${inter}, fn: mean, createEmpty: true)\n  |> yield(name: \"mean\")\n",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Interface Packets",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "packetRate {dn=\\\".*\\/dbgIf(In|Out)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$1 $2"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "packetRate {customer=\\\"(.*)\\\", dn=\\\".*\\/dbgIf(In|Out)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$1 $3 $2"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 20,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"interface\"] =~ /^${Port:regex}$/)\n  |> filter(fn: (r) => r[\"unit\"] == \"C\")\n  |> filter(fn: (r) => r[\"_field\"] == \"value\")\n  |> filter(fn: (r) => r[\"adminSt\"] == \"up\")\n  |> keep(columns: [\"_field\", \"_time\", \"_value\", \"interface\", \"dn\"])\n  |> aggregateWindow(every: ${inter}, fn: mean, createEmpty: true)\n  |> yield(name: \"mean\")\n",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Transceiver temperatures",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "value {dn=\\\".*\\/fcot(dd)?/(.*)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$3 $2"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "value {customer=\\\"(.*)\\\", dn=\\\".*\\/fcot/(.*)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$1 $3 $2"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "volt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 20,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"interface\"] =~ /^${Port:regex}$/)\n  |> filter(fn: (r) => r[\"unit\"] == \"V\")\n  |> filter(fn: (r) => r[\"_field\"] == \"value\")\n  |> filter(fn : (r) => r[\"adminSt\"] == \"up\")\n  |> keep(columns: [\"_field\", \"_time\", \"_value\", \"interface\", \"dn\"])\n  |> aggregateWindow(every: ${inter}, fn: mean, createEmpty: true)\n  |> yield(name: \"mean\")\n",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Transceiver voltage",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "value {dn=\\\".*\\/fcot(dd)?/(.*)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$3 $2"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "value {customer=\\\"(.*)\\\", dn=\\\".*\\/fcot/(.*)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$1 $3 $2"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "dBm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 21,
+        "w": 12,
+        "x": 0,
+        "y": 38
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"interface\"] =~ /^${Port:regex}$/)\n  |> filter(fn: (r) => r[\"unit\"] == \"dBm\")\n  |> filter(fn: (r) => r[\"_field\"] == \"value\")\n  |> filter(fn: (r) => r[\"adminSt\"] == \"up\")\n  |> keep(columns: [\"_field\", \"_time\", \"_value\", \"interface\", \"dn\"])\n  |> aggregateWindow(every: ${inter}, fn: mean, createEmpty: true)\n  |> yield(name: \"mean\")\n",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Transceiver dBm",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "value {dn=\\\".*\\/fcot(dd)?/(.*)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$3 $2"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "value {customer=\\\"(.*)\\\", dn=\\\".*\\/fcot/(.*)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$1 $3 $2"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "mamp"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 21,
+        "w": 12,
+        "x": 12,
+        "y": 38
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"interface\"] =~ /^${Port:regex}$/)\n  |> filter(fn: (r) => r[\"unit\"] == \"mA\")\n  |> filter(fn: (r) => r[\"_field\"] == \"value\")\n  |> filter(fn: (r) => r[\"adminSt\"] == \"up\")\n  |> keep(columns: [\"_field\", \"_time\", \"_value\", \"interface\", \"dn\"])\n  |> aggregateWindow(every: ${inter}, fn: mean, createEmpty: true)\n  |> yield(name: \"mean\")\n",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Transceiver current",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "value {dn=\\\".*\\/fcot(dd)?/(.*)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$3 $2"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "value {customer=\\\"(.*)\\\", dn=\\\".*\\/fcot/(.*)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$1 $3 $2"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Out/"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 21,
+        "w": 12,
+        "x": 0,
+        "y": 59
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "import \"experimental/aggregate\"\n\nfrom(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"interface\"] =~ /^${Port:regex}$/)\n  |> filter(fn: (r) => r[\"dn\"] =~ /^.*\\/dbgIf(In|Out)$/)\n  |> filter(fn: (r) => r[\"_field\"] == \"broadcastPkts\")\n  |> filter(fn: (r) => r[\"adminSt\"] == \"up\")\n  |> aggregate.rate(every: ${inter}, unit: 1s, groupColumns: [\"dn\", \"interface\"])\n\n\n",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Interface Broadcast",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{dn=\\\".*\\/dbgIf(In|Out)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$2 $1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{customer=\\\"(.*)\\\", dn=\\\".*\\/dbgIf(In|Out)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$1 $3 $2"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Out/"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 21,
+        "w": 12,
+        "x": 12,
+        "y": 59
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "import \"experimental/aggregate\"\n\nfrom(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"interface\"] =~ /^${Port:regex}$/)\n  |> filter(fn: (r) => r[\"dn\"] =~ /^.*\\/dbgIf(In|Out)$/)\n  |> filter(fn: (r) => r[\"_field\"] == \"multicastPkts\")\n  |> filter(fn: (r) => r[\"adminSt\"] == \"up\")\n  |> aggregate.rate(every: ${inter}, unit: 1s, groupColumns: [\"dn\", \"interface\"])\n\n\n",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Interface Multicast",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{dn=\\\".*\\/dbgIf(In|Out)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$2 $1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{customer=\\\"(.*)\\\", dn=\\\".*\\/dbgIf(In|Out)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$1 $3 $2"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Out/"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 19,
+        "w": 12,
+        "x": 0,
+        "y": 80
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "import \"experimental/aggregate\"\n\nfrom(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"interface\"] =~ /^${Port:regex}$/)\n  |> filter(fn: (r) => r[\"dn\"] =~ /^.*\\/dbgIf(In|Out)$/)\n  |> filter(fn: (r) => r[\"_field\"] == \"errors\")\n  |> filter(fn: (r) => r[\"adminSt\"] == \"up\")\n  |> aggregate.rate(every: ${inter}, unit: 1s, groupColumns: [\"dn\", \"interface\"])",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Interface Errors",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{dn=\\\".*\\/dbgIf(In|Out)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$2 $1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{customer=\\\"(.*)\\\", dn=\\\".*\\/dbgIf(In|Out)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$1 $3 $2"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Out/"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 19,
+        "w": 12,
+        "x": 12,
+        "y": 80
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "groupBy": [],
+          "hide": false,
+          "key": "Q-0b84ff2a-b6e9-43f4-a077-f3cd7a5e6aa7-0",
+          "measurement": "sys/intf/aggr-[po1000]/dbgIfIn",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "import \"experimental/aggregate\"\n\nfrom(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"interface\"] =~ /^${Port:regex}$/)\n  |> filter(fn: (r) => r[\"dn\"] =~ /^.*\\/dbgIf(In|Out)$/)\n  |> filter(fn: (r) => r[\"_field\"] == \"discards\")\n  |> filter(fn: (r) => r[\"adminSt\"] == \"up\")\n  |> aggregate.rate(every: ${inter}, unit: 1s, groupColumns: [\"dn\", \"interface\"])",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "multicastPkts"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "nUcastPkts"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Interface Discards",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{dn=\\\".*\\/dbgIf(In|Out)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$2 $1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{customer=\\\"(.*)\\\", dn=\\\".*\\/dbgIf(In|Out)\\\", interface=\\\"(.*)\\\"}",
+            "renamePattern": "$1 $3 $2"
+          }
+        }
+      ],
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 40,
+  "tags": [
+    "interfaces"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "001-ES01-TOR3",
+          "value": "001-ES01-TOR3"
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdbFlux"
+        },
+        "definition": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> keep(columns: [\"switch\"])\n  |> group()\n  |> distinct(column: \"switch\")",
+        "includeAll": false,
+        "name": "Switch",
+        "options": [],
+        "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> keep(columns: [\"switch\"])\n  |> group()\n  |> distinct(column: \"switch\")",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "phys",
+          "value": "phys"
+        },
+        "label": "Interface type",
+        "name": "Type",
+        "options": [
+          {
+            "selected": true,
+            "text": "phys",
+            "value": "phys"
+          },
+          {
+            "selected": false,
+            "text": "aggr",
+            "value": "aggr"
+          }
+        ],
+        "query": "phys, aggr",
+        "type": "custom"
+      },
+      {
+        "current": {
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdbFlux"
+        },
+        "definition": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> filter(fn: (r) => r[\"type\"] == \"${Type}\")\n  |> keep(columns: [\"interface\"])\n  |> group()\n  |> distinct(column: \"interface\")\n",
+        "includeAll": true,
+        "multi": true,
+        "name": "Port",
+        "options": [],
+        "query": {
+          "0": "f",
+          "1": "r",
+          "2": "o",
+          "3": "m",
+          "4": "(",
+          "5": "b",
+          "6": "u",
+          "7": "c",
+          "8": "k",
+          "9": "e",
+          "10": "t",
+          "11": ":",
+          "12": " ",
+          "13": "\"",
+          "14": "c",
+          "15": "i",
+          "16": "s",
+          "17": "c",
+          "18": "o",
+          "19": "_",
+          "20": "m",
+          "21": "d",
+          "22": "t",
+          "23": "\"",
+          "24": ")",
+          "25": "\n",
+          "26": " ",
+          "27": " ",
+          "28": "|",
+          "29": ">",
+          "30": " ",
+          "31": "r",
+          "32": "a",
+          "33": "n",
+          "34": "g",
+          "35": "e",
+          "36": "(",
+          "37": "s",
+          "38": "t",
+          "39": "a",
+          "40": "r",
+          "41": "t",
+          "42": ":",
+          "43": " ",
+          "44": "v",
+          "45": ".",
+          "46": "t",
+          "47": "i",
+          "48": "m",
+          "49": "e",
+          "50": "R",
+          "51": "a",
+          "52": "n",
+          "53": "g",
+          "54": "e",
+          "55": "S",
+          "56": "t",
+          "57": "a",
+          "58": "r",
+          "59": "t",
+          "60": ",",
+          "61": " ",
+          "62": "s",
+          "63": "t",
+          "64": "o",
+          "65": "p",
+          "66": ":",
+          "67": " ",
+          "68": "v",
+          "69": ".",
+          "70": "t",
+          "71": "i",
+          "72": "m",
+          "73": "e",
+          "74": "R",
+          "75": "a",
+          "76": "n",
+          "77": "g",
+          "78": "e",
+          "79": "S",
+          "80": "t",
+          "81": "o",
+          "82": "p",
+          "83": ")",
+          "84": "\n",
+          "85": " ",
+          "86": " ",
+          "87": "|",
+          "88": ">",
+          "89": " ",
+          "90": "f",
+          "91": "i",
+          "92": "l",
+          "93": "t",
+          "94": "e",
+          "95": "r",
+          "96": "(",
+          "97": "f",
+          "98": "n",
+          "99": ":",
+          "100": " ",
+          "101": "(",
+          "102": "r",
+          "103": ")",
+          "104": " ",
+          "105": "=",
+          "106": ">",
+          "107": " ",
+          "108": "r",
+          "109": "[",
+          "110": "\"",
+          "111": "s",
+          "112": "w",
+          "113": "i",
+          "114": "t",
+          "115": "c",
+          "116": "h",
+          "117": "\"",
+          "118": "]",
+          "119": " ",
+          "120": "=",
+          "121": "=",
+          "122": " ",
+          "123": "\"",
+          "124": "$",
+          "125": "{",
+          "126": "S",
+          "127": "w",
+          "128": "i",
+          "129": "t",
+          "130": "c",
+          "131": "h",
+          "132": "}",
+          "133": "\"",
+          "134": ")",
+          "135": "\n",
+          "136": " ",
+          "137": " ",
+          "138": "|",
+          "139": ">",
+          "140": " ",
+          "141": "f",
+          "142": "i",
+          "143": "l",
+          "144": "t",
+          "145": "e",
+          "146": "r",
+          "147": "(",
+          "148": "f",
+          "149": "n",
+          "150": ":",
+          "151": " ",
+          "152": "(",
+          "153": "r",
+          "154": ")",
+          "155": " ",
+          "156": "=",
+          "157": ">",
+          "158": " ",
+          "159": "r",
+          "160": "[",
+          "161": "\"",
+          "162": "_",
+          "163": "m",
+          "164": "e",
+          "165": "a",
+          "166": "s",
+          "167": "u",
+          "168": "r",
+          "169": "e",
+          "170": "m",
+          "171": "e",
+          "172": "n",
+          "173": "t",
+          "174": "\"",
+          "175": "]",
+          "176": " ",
+          "177": "=",
+          "178": "=",
+          "179": " ",
+          "180": "\"",
+          "181": "s",
+          "182": "y",
+          "183": "s",
+          "184": "/",
+          "185": "i",
+          "186": "n",
+          "187": "t",
+          "188": "f",
+          "189": "\"",
+          "190": ")",
+          "191": "\n",
+          "192": " ",
+          "193": " ",
+          "194": "|",
+          "195": ">",
+          "196": " ",
+          "197": "f",
+          "198": "i",
+          "199": "l",
+          "200": "t",
+          "201": "e",
+          "202": "r",
+          "203": "(",
+          "204": "f",
+          "205": "n",
+          "206": ":",
+          "207": " ",
+          "208": "(",
+          "209": "r",
+          "210": ")",
+          "211": " ",
+          "212": "=",
+          "213": ">",
+          "214": " ",
+          "215": "r",
+          "216": "[",
+          "217": "\"",
+          "218": "t",
+          "219": "y",
+          "220": "p",
+          "221": "e",
+          "222": "\"",
+          "223": "]",
+          "224": " ",
+          "225": "=",
+          "226": "=",
+          "227": " ",
+          "228": "\"",
+          "229": "p",
+          "230": "h",
+          "231": "y",
+          "232": "s",
+          "233": "\"",
+          "234": ")",
+          "235": "\n",
+          "236": " ",
+          "237": " ",
+          "238": "|",
+          "239": ">",
+          "240": " ",
+          "241": "k",
+          "242": "e",
+          "243": "e",
+          "244": "p",
+          "245": "(",
+          "246": "c",
+          "247": "o",
+          "248": "l",
+          "249": "u",
+          "250": "m",
+          "251": "n",
+          "252": "s",
+          "253": ":",
+          "254": " ",
+          "255": "[",
+          "256": "\"",
+          "257": "i",
+          "258": "n",
+          "259": "t",
+          "260": "e",
+          "261": "r",
+          "262": "f",
+          "263": "a",
+          "264": "c",
+          "265": "e",
+          "266": "\"",
+          "267": "]",
+          "268": ")",
+          "269": "\n",
+          "270": " ",
+          "271": " ",
+          "272": "|",
+          "273": ">",
+          "274": " ",
+          "275": "g",
+          "276": "r",
+          "277": "o",
+          "278": "u",
+          "279": "p",
+          "280": "(",
+          "281": ")",
+          "282": "\n",
+          "283": " ",
+          "284": " ",
+          "285": "|",
+          "286": ">",
+          "287": " ",
+          "288": "d",
+          "289": "i",
+          "290": "s",
+          "291": "t",
+          "292": "i",
+          "293": "n",
+          "294": "c",
+          "295": "t",
+          "296": "(",
+          "297": "c",
+          "298": "o",
+          "299": "l",
+          "300": "u",
+          "301": "m",
+          "302": "n",
+          "303": ":",
+          "304": " ",
+          "305": "\"",
+          "306": "i",
+          "307": "n",
+          "308": "t",
+          "309": "e",
+          "310": "r",
+          "311": "f",
+          "312": "a",
+          "313": "c",
+          "314": "e",
+          "315": "\"",
+          "316": ")",
+          "317": "\n",
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> filter(fn: (r) => r[\"type\"] == \"${Type}\")\n  |> keep(columns: [\"interface\"])\n  |> group()\n  |> distinct(column: \"interface\")\n"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "auto": true,
+        "auto_count": 100,
+        "auto_min": "30s",
+        "current": {
+          "text": "$__auto",
+          "value": "$__auto_interval_inter"
+        },
+        "name": "inter",
+        "options": [
+          {
+            "selected": false,
+            "text": "1m",
+            "value": "1m"
+          },
+          {
+            "selected": false,
+            "text": "10m",
+            "value": "10m"
+          },
+          {
+            "selected": false,
+            "text": "30m",
+            "value": "30m"
+          },
+          {
+            "selected": false,
+            "text": "1h",
+            "value": "1h"
+          },
+          {
+            "selected": false,
+            "text": "6h",
+            "value": "6h"
+          },
+          {
+            "selected": false,
+            "text": "12h",
+            "value": "12h"
+          },
+          {
+            "selected": false,
+            "text": "1d",
+            "value": "1d"
+          },
+          {
+            "selected": false,
+            "text": "7d",
+            "value": "7d"
+          },
+          {
+            "selected": false,
+            "text": "14d",
+            "value": "14d"
+          },
+          {
+            "selected": false,
+            "text": "30d",
+            "value": "30d"
+          }
+        ],
+        "query": "1m,10m,30m,1h,6h,12h,1d,7d,14d,30d",
+        "refresh": 2,
+        "type": "interval"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-12h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "All Interfaces",
+  "uid": "ccf44427-2722-4591-8ab9-4efe5d2550d1",
+  "version": 7,
+  "weekStart": ""
+}

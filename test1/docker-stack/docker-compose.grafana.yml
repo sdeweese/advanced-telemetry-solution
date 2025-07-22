@@ -1,0 +1,54 @@
+services:
+  grafana:
+    restart: unless-stopped
+    image: grafana/grafana:11.4.0
+    environment:
+      - INFLUXDB_ADDRESS=$INFLUXDB_ADDRESS
+      - DOCKER_INFLUXDB_INIT_ORG=$DOCKER_INFLUXDB_INIT_ORG
+      - GRAFANA_INFLUXDB_DEFAULT_BUCKET=cisco_mdt
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=$DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+    ports:
+      - "443:443"
+    volumes:
+      - grafana_data:/var/lib/grafana:rw
+      - $CONFIG_PATH/grafana/grafana.ini:/etc/grafana/grafana.ini:ro
+      - $CONFIG_PATH/grafana/provisioning/:/etc/grafana/provisioning/:ro
+      - $CONFIG_PATH/grafana/dashboards/:/var/lib/grafana/dashboards/:ro
+      - $GRAFANA_KEY_PATH:/etc/grafana/grafana.key
+      - $GRAFANA_CRT_PATH:/etc/grafana/grafana.crt
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-k", "https://localhost/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  telegraf:
+    restart: unless-stopped
+    image: telegraf:1.33-alpine
+    user: telegraf:$DOCKER_GID
+    volumes:
+      - $CONFIG_PATH/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - $CONFIG_PATH/telegraf/telegraf.d/:/etc/telegraf/telegraf.d/:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /:/hostfs:ro
+    depends_on:
+      grafana:
+        condition: service_healthy
+    environment:
+      - HOSTNAME=$HOSTNAME
+      - INFLUXDB_ADDRESS=$INFLUXDB_ADDRESS
+      - DOCKER_INFLUXDB_INIT_ORG=$DOCKER_INFLUXDB_INIT_ORG
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=$DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+      - HOST_MOUNT_PREFIX=/hostfs
+      - HOST_PROC=/hostfs/proc
+    ports:
+      - "8125:8125"
+      - "8000:8000"
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider localhost:8000 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  grafana_data: {}

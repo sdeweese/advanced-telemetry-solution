@@ -1,0 +1,1964 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 5,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 5,
+        "x": 0,
+        "y": 0
+      },
+      "id": 30,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/nxosVersion/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/showversion\")\n  |> filter(fn: (r) => r[\"_field\"] == \"nxosVersion\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> fill(column: \"_value\", usePrevious: true)\n  |> keep(columns: [\"_field\", \"_time\", \"_value\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "NXOS version",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 5,
+        "x": 5,
+        "y": 0
+      },
+      "id": 31,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/kernelUptime/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"ping\" or r[\"_measurement\"] == \"sys/showversion\")\n  |> filter(fn: (r) => r[\"_field\"] == \"kernelUptime\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> last()\n  |> fill(column: \"_value\", usePrevious: true)\n  |> keep(columns: [\"_field\", \"_time\", \"_value\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Kernel uptime",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 6,
+        "x": 10,
+        "y": 0
+      },
+      "id": 32,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/lastResetReason/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"ping\" or r[\"_measurement\"] == \"sys/showversion\")\n  |> filter(fn: (r) => r[\"_field\"] == \"nxosVersion\" or r[\"_field\"] == \"lastResetReason\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> fill(column: \"_value\", usePrevious: true)\n  |> keep(columns: [\"_field\", \"_time\", \"_value\"])\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Last reset reason",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 16,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto",
+        "text": {}
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/procsys/syscpusummary\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"procSysCpuSummary/procSysCpuHistory\"] == \"syscpuhistory-last60seconds\")\n  |> filter(fn: (r) => r[\"_field\"] == \"usageAvg\")\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)\n  |> keep(columns: [\"_time\", \"_value\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU Load",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 20,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto",
+        "text": {}
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/procsys/sysmem\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"procSysMem/procSysMemUsage\"] == \"sysmemusage\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg\")\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)\n  |> keep(columns: [\"_time\", \"_value\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory Usage",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 10,
+        "x": 0,
+        "y": 2
+      },
+      "id": 22,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/alarms\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"_field\"] =~ /description|state|severity|resource/)\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> rename(columns: {description: \"_value\"})\n  |> keep(columns:[\"_time\", \"_value\", \"state\", \"severity\", \"resource\"])\n\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Alarm history",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "watt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 6,
+        "x": 10,
+        "y": 2
+      },
+      "id": 20,
+      "options": {
+        "displayMode": "lcd",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "text": {},
+        "valueMode": "color"
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/ch\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"dn\"] =~ /sys\\/ch\\/psuslot-.*\\/psu/)\n  |> filter(fn: (r) => r[\"_field\"] == \"pIn\")\n  |> keep(columns: [\"_time\", \"_value\", \"_field\", \"dn\"])\n  |> last()\n  |> group()\n  |> sum(column: \"_value\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Power Draw",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "displayName": "${__field.labels._value_d2}",
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 10,
+        "y": 4
+      },
+      "id": 8,
+      "options": {
+        "displayMode": "lcd",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "text": {},
+        "valueMode": "color"
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/ch\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"dn\"] =~ /sys\\/ch\\/supslot-.*\\/sup\\/sensor-.*/)\n  |> filter(fn: (r) => r[\"_field\"] == \"tempValue\")\n  |> keep(columns: [\"_time\", \"model\", \"_value\"])\n  |> group(columns: [\"model\"])\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)\n  |> yield(name: \"pivoted_data\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Temperature",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "fillOpacity": 70,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineWidth": 0,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "down": {
+                  "color": "red",
+                  "index": 1
+                },
+                "up": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^eth/"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Show details",
+                    "url": "d/ccf44427-2722-4591-8ab9-4efe5d2550d1/interfaces-physical?var-Switch=${Switch}&var-Port=${__field.labels.interface}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^po/"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Show details",
+                    "url": "d/c60d89b9-ef91-4a26-b23b-d6bd678956d5/interfaces-aggregate?var-Port=${__field.labels.interface}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 22,
+        "w": 5,
+        "x": 0,
+        "y": 8
+      },
+      "id": 39,
+      "options": {
+        "alignValue": "left",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "mergeValues": true,
+        "perPage": 25,
+        "rowHeight": 0.9,
+        "showValue": "never",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "import \"join\"\nimport \"array\"\n\n// Step 1: Define a dummy table to prevent empty `ints`\ndummyInts = array.from(rows: [{interface: \"DUMMY\"}])\n\n// Step 2: Identify interfaces currently matching the operSt filter\nints = from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"type\"] =~ /${interfaceType:regex}/)\n  |> filter(fn: (r) => r[\"_field\"] == \"operSt\")\n  |> keep(columns: [\"_field\", \"_time\", \"_value\", \"interface\"])\n  |> last()\n  |> filter(fn: (r) => r[\"_value\"] =~ /${operSt:regex}/)\n  |> keep(columns: [\"interface\"])\n  |> group()\n\n// Step 3: Ensure `ints` is never empty by unioning with `dummyInts`\nints2 = union(tables: [ints, dummyInts])\n\n// Step 4: Get full historical operational state data\ndata = from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/intf\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"type\"] =~ /${interfaceType:regex}/)\n  |> filter(fn: (r) => r[\"_field\"] == \"operSt\")\n  |> keep(columns: [\"_field\", \"_time\", \"_value\", \"interface\"])\n  |> aggregateWindow(every: ${Interval}, fn: last, createEmpty: true)\n  |> group()\n\n// Step 5: Perform an inner join using your original working syntax\nresult = join.inner(\n  left: data,\n  right: ints2,\n  on: (l, r) => l.interface == r.interface,\n  as: (l, r) => l\n)\n\n// Step 6: Remove the dummy row if it exists\nresult2 = result |> filter(fn: (r) => r.interface != \"DUMMY\")\n\n// Step 7: Output the final result\nresult2 |> group(columns: [\"interface\"]) |> keep(columns: [\"_time\", \"_value\", \"interface\"])\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Interface operational state",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "operSt (.*)",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "type": "state-timeline"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 10,
+        "x": 5,
+        "y": 8
+      },
+      "id": 38,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"show bgp all summary\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"totalnetworks\")\n  |> keep(columns: [\"_time\", \"_value\", \"_field\", \"af_name\"])\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of BGP Networks",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "fillOpacity": 70,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineWidth": 0,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "Active": {
+                  "color": "light-green",
+                  "index": 5
+                },
+                "Closing": {
+                  "color": "light-orange",
+                  "index": 7
+                },
+                "Connect": {
+                  "color": "super-light-green",
+                  "index": 4
+                },
+                "Error": {
+                  "color": "red",
+                  "index": 8
+                },
+                "Established": {
+                  "color": "green",
+                  "index": 6
+                },
+                "Idle": {
+                  "color": "yellow",
+                  "index": 3
+                },
+                "Illegal": {
+                  "color": "dark-red",
+                  "index": 1
+                },
+                "Shut": {
+                  "color": "orange",
+                  "index": 2
+                },
+                "Unknown": {
+                  "color": "yellow",
+                  "index": 9
+                },
+                "Unspecified": {
+                  "color": "super-light-yellow",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 22,
+        "w": 9,
+        "x": 15,
+        "y": 8
+      },
+      "id": 37,
+      "options": {
+        "alignValue": "left",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "mergeValues": true,
+        "rowHeight": 0.9,
+        "showValue": "never",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "  from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"show bgp all summary\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"state\")\n  |> keep(columns: [\"_time\", \"_value\", \"_field\", \"TABLE_neighbor\", \"neighboras\", \"af_name\"])\n  |> aggregateWindow(every: ${Interval}, fn: last, createEmpty: true)",
+          "refId": "A"
+        }
+      ],
+      "title": "Established BGP peers",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "state {TABLE_neighbor=\\\"(.*)\\\", af_name=\\\"(.*)\\\", neighboras=\\\"(.*)\\\"}",
+            "renamePattern": "$2 $1 $3"
+          }
+        }
+      ],
+      "type": "state-timeline"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 10,
+        "x": 5,
+        "y": 20
+      },
+      "id": 24,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"show bgp all summary\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"totalpaths\")\n  |> keep(columns: [\"_time\", \"_value\", \"_field\", \"af_name\"])\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of BGP Paths",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 30
+      },
+      "id": 23,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "base = from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/procsys/syscpusummary\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"procSysCpuSummary/procSysCpu\"] == \"syscpu-ALL\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg\")\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)\n\nidle = base\n   |> filter(fn: (r) => r[\"procSysCpuSummary/procSysCpu/procIdle\"] == \"idle\")\n   |> map(fn: (r) => ({r with metric: \"idle\"}))\n\nirq = base\n  |> filter(fn: (r) => r[\"procSysCpuSummary/procSysCpu/procIrq\"] == \"irq\")\n  |> map(fn: (r) => ({r with metric: \"irq\"}))\n\nkernel = base\n  |> filter(fn: (r) => r[\"procSysCpuSummary/procSysCpu/procKernel\"] == \"kernel\")\n  |> map(fn: (r) => ({r with metric: \"kernel\"}))\n\nnice = base\n  |> filter(fn: (r) => r[\"procSysCpuSummary/procSysCpu/procNice\"] == \"nice\")\n  |> map(fn: (r) => ({r with metric: \"nice\"}))\n\nsoftirq = base\n  |> filter(fn: (r) => r[\"procSysCpuSummary/procSysCpu/procSoftirq\"] == \"softirq\")\n  |> map(fn: (r) => ({r with metric: \"softirq\"}))\n\ntotal = base\n  |> filter(fn: (r) => r[\"procSysCpuSummary/procSysCpu/procTotal\"] == \"total\")\n  |> map(fn: (r) => ({r with metric: \"total\"}))\n\nuser = base\n  |> filter(fn: (r) => r[\"procSysCpuSummary/procSysCpu/procUser\"] == \"user\")\n  |> map(fn: (r) => ({r with metric: \"user\"}))\n\nwait = base\n  |> filter(fn: (r) => r[\"procSysCpuSummary/procSysCpu/procWait\"] == \"wait\")\n  |> map(fn: (r) => ({r with metric: \"wait\"}))\n\nunion(tables: [idle, irq, kernel, nice, softirq, total, user, wait])\n  |> keep(columns: [\"_time\", \"_value\", \"metric\"])\n  |> group(columns: [\"metric\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 30
+      },
+      "id": 21,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/procsys/syscpusummary\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"procSysCpuSummary/procSysCpu\"] != \"syscpu-ALL\")\n  |> filter(fn: (r) => r[\"procSysCpuSummary/procSysCpu/procIdle\"] == \"idle\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg\")\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)\n  |> map(fn: (r) => ({r with _value: 100.0 - r._value}))\n  |> group(columns: [\"procSysCpuSummary/procSysCpu\"])\n  |> keep(columns: [\"_time\", \"_value\", \"_value\", \"procSysCpuSummary/procSysCpu\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU usage per core",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "deckbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 39
+      },
+      "id": 27,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "base = from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/procsys/sysmem\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n\nused = base\n  |> filter(fn: (r) => r[\"procSysMem/procSysMemUsed\"] == \"sysmemused\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg\")\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)\n  |> map(fn: (r) => ({r with _field: \"used\"}))\n\nfree = base\n  |> filter(fn: (r) => r[\"procSysMem/procSysMemFree\"] == \"sysmemfree\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg\")\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)\n  |> map(fn: (r) => ({r with _field: \"free\"}))\n\nother = base\n  |> filter(fn: (r) => r[\"_field\"] == \"buffers\" or r[\"_field\"] == \"cached\" or r[\"_field\"] == \"reserved\" or r[\"_field\"] == \"total\")\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)\n\nunion(tables: [used, free, other])\n  |> keep(columns: [\"_time\", \"_value\", \"_field\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": true,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "watt"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pOut"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 0,
+        "y": 47
+      },
+      "id": 34,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/ch\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"dn\"] =~ /sys\\/ch\\/psuslot-.*\\/psu/)\n  |> filter(fn: (r) => r[\"_field\"] == \"pIn\" or r[\"_field\"] == \"pOut\")\n  |> keep(columns: [\"_time\", \"_value\", \"_field\", \"dn\"])\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)",
+          "refId": "A"
+        }
+      ],
+      "title": "Power - Watts",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": true,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "volt"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vOut"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 8,
+        "y": 47
+      },
+      "id": 35,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/ch\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"dn\"] =~ /sys\\/ch\\/psuslot-.*\\/psu/)\n  |> filter(fn: (r) => r[\"_field\"] == \"vIn\" or r[\"_field\"] == \"vOut\")\n  |> keep(columns: [\"_time\", \"_value\", \"_field\", \"dn\"])\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)",
+          "refId": "A"
+        }
+      ],
+      "title": "Power - Voltage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": true,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "amp"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "iOut"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 16,
+        "y": 47
+      },
+      "id": 36,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/ch\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"dn\"] =~ /sys\\/ch\\/psuslot-.*\\/psu/)\n  |> filter(fn: (r) => r[\"_field\"] == \"iIn\" or r[\"_field\"] == \"iOut\")\n  |> keep(columns: [\"_time\", \"_value\", \"_field\", \"dn\"])\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)",
+          "refId": "A"
+        }
+      ],
+      "title": "Power - Amps",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "${__field.labels._value_d2}",
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 59
+      },
+      "id": 28,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/ch\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"dn\"] =~ /sys\\/ch\\/supslot-.*\\/sup\\/sensor-.*/)\n  |> filter(fn: (r) => r[\"_field\"] == \"tempValue\")\n  |> keep(columns: [\"_time\", \"model\", \"_value\"])\n  |> group(columns: [\"model\"])\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)\n  |> yield(name: \"pivoted_data\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Temperature",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdbFlux"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "${__field.labels._value_d2}",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "rotrpm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 67
+      },
+      "id": 29,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdbFlux"
+          },
+          "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/ch\")\n  |> filter(fn: (r) => r[\"switch\"] == \"${Switch}\")\n  |> filter(fn: (r) => r[\"dn\"] =~ /sys\\/ch\\/ftslot-.*\\/ft\\/fan-.*/)\n  |> filter(fn: (r) => r[\"_field\"] == \"speedInRpm\")\n  |> keep(columns: [\"_time\", \"_value\", \"dn\"])\n  |> aggregateWindow(every: ${Interval}, fn: mean, createEmpty: true)",
+          "refId": "A"
+        }
+      ],
+      "title": "Fan Speeds",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 40,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "400-ES01-TOR2",
+          "value": "400-ES01-TOR2"
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdbFlux"
+        },
+        "definition": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/ch\")\n  |> keep(columns: [\"switch\"])\n  |> group()\n  |> distinct(column: \"switch\")",
+        "includeAll": false,
+        "name": "Switch",
+        "options": [],
+        "query": "from(bucket: \"cisco_mdt\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sys/ch\")\n  |> keep(columns: [\"switch\"])\n  |> group()\n  |> distinct(column: \"switch\")",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "auto": true,
+        "auto_count": 100,
+        "auto_min": "30s",
+        "current": {
+          "text": "auto",
+          "value": "$__auto_interval_Interval"
+        },
+        "name": "Interval",
+        "options": [
+          {
+            "selected": true,
+            "text": "auto",
+            "value": "$__auto_interval_Interval"
+          },
+          {
+            "selected": false,
+            "text": "1m",
+            "value": "1m"
+          },
+          {
+            "selected": false,
+            "text": "10m",
+            "value": "10m"
+          },
+          {
+            "selected": false,
+            "text": "30m",
+            "value": "30m"
+          },
+          {
+            "selected": false,
+            "text": "1h",
+            "value": "1h"
+          },
+          {
+            "selected": false,
+            "text": "6h",
+            "value": "6h"
+          },
+          {
+            "selected": false,
+            "text": "12h",
+            "value": "12h"
+          },
+          {
+            "selected": false,
+            "text": "1d",
+            "value": "1d"
+          },
+          {
+            "selected": false,
+            "text": "7d",
+            "value": "7d"
+          },
+          {
+            "selected": false,
+            "text": "14d",
+            "value": "14d"
+          },
+          {
+            "selected": false,
+            "text": "30d",
+            "value": "30d"
+          }
+        ],
+        "query": "1m,10m,30m,1h,6h,12h,1d,7d,14d,30d",
+        "refresh": 2,
+        "type": "interval"
+      },
+      {
+        "current": {
+          "text": "$__all",
+          "value": "$__all"
+        },
+        "includeAll": true,
+        "name": "operSt",
+        "options": [
+          {
+            "selected": false,
+            "text": "up",
+            "value": "up"
+          },
+          {
+            "selected": false,
+            "text": "down",
+            "value": "down"
+          }
+        ],
+        "query": "up, down",
+        "type": "custom"
+      },
+      {
+        "current": {
+          "text": "$__all",
+          "value": "$__all"
+        },
+        "includeAll": true,
+        "name": "interfaceType",
+        "options": [
+          {
+            "selected": false,
+            "text": "aggr",
+            "value": "aggr"
+          },
+          {
+            "selected": false,
+            "text": "phys",
+            "value": "phys"
+          }
+        ],
+        "query": "aggr, phys",
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-12h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Influx - system telemetry",
+  "uid": "c3bd2419-8a89-4057-af03-1c0c3a8f2ef8",
+  "version": 11,
+  "weekStart": ""
+}

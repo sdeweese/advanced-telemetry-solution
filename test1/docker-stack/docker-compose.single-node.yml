@@ -1,0 +1,87 @@
+# The single-node stack is intended for development and testing purposes only.
+# It is NOT to be used for production. left here for reference.
+# This is an artifact and is not maintained and should not be assumed to be working.
+# Jeremy Foran - Jan 21 2025
+services:
+  telegraf:
+    build: ./images/ingest/telegraf
+    volumes:
+      - $CONFIG_PATH/ingest/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - $CONFIG_PATH/ingest/telegraf/telegraf.d/references/:/etc/telegraf/telegraf.d/references/:ro
+      - $CONFIG_PATH/ingest/telegraf/telegraf.d/000.globals.conf:/etc/telegraf/telegraf.d/000.globals.conf:ro
+      - $CONFIG_PATH/influx/telegraf/telegraf.d/001.agent.conf:/etc/telegraf/telegraf.d/001.agent.conf:ro
+      - $CONFIG_PATH/ingest/telegraf/telegraf.d/101.input.cisco.conf:/etc/telegraf/telegraf.d/101.input.cisco.conf:ro
+      - $CONFIG_PATH/ingest/telegraf/telegraf.d/102.input.statsd.conf:/etc/telegraf/telegraf.d/102.input.statsd.conf:ro
+      - $CONFIG_PATH/influx/telegraf/telegraf.d/103.input.influx.conf:/etc/telegraf/telegraf.d/103.input.influx.conf:ro
+      - $CONFIG_PATH/ingest/telegraf/telegraf.d/201.processor.interfaces.conf:/etc/telegraf/telegraf.d/201.processor.interfaces.conf:ro
+      - $CONFIG_PATH/ingest/telegraf/telegraf.d/202.processor.sysch.conf:/etc/telegraf/telegraf.d/202.processor.sysch.conf:ro
+      - $CONFIG_PATH/ingest/telegraf/telegraf.d/203.processor.bgp.conf:/etc/telegraf/telegraf.d/203.processor.bgp.conf:ro
+      - $CONFIG_PATH/ingest/telegraf/telegraf.d/299.processor.lookups.conf:/etc/telegraf/telegraf.d/299.processor.lookups.conf:ro
+      - $CONFIG_PATH/influx/telegraf/telegraf.d/301.output.influxdb.conf:/etc/telegraf/telegraf.d/301.output.influxdb.conf:ro
+      - $CONFIG_PATH/influx/telegraf/telegraf.d/302.output.health.conf:/etc/telegraf/telegraf.d/302.output.health.conf:ro
+    depends_on:
+      influxdb:
+        condition: service_healthy
+    environment:
+      - HOSTNAME=$HOSTNAME
+      - DOCKER_INFLUXDB_INIT_ORG=$DOCKER_INFLUXDB_INIT_ORG
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=$DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+    ports:
+      - "8125:8125"
+      - "57000:57000"
+      - "5000:5000"
+      - "8080:8080"
+
+  influxdb:
+    image: influxdb:2.7-alpine
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=$DOCKER_INFLUXDB_INIT_USERNAME
+      - DOCKER_INFLUXDB_INIT_PASSWORD=$DOCKER_INFLUXDB_INIT_PASSWORD
+      - DOCKER_INFLUXDB_INIT_ORG=$DOCKER_INFLUXDB_INIT_ORG
+      - DOCKER_INFLUXDB_INIT_BUCKET=cisco_mdt
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=$DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb2_data:/var/lib/influxdb2:rw
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  influxdb_init:
+      links:
+        - influxdb
+      image: influxdb:2.7-alpine
+      entrypoint: [ '/bin/sh', '-c' ]
+      command: |
+        "
+        until influx org list --host http://influxdb:8086 --token $DOCKER_INFLUXDB_INIT_ADMIN_TOKEN | grep $DOCKER_INFLUXDB_INIT_ORG; do
+          echo 'Waiting for organization $DOCKER_INFLUXDB_INIT_ORG to be created...';
+          sleep 2;
+        done;
+        influx bucket create --skip-verify --name influx_metrics --retention 30d --org $DOCKER_INFLUXDB_INIT_ORG --host http://influxdb:8086 --token $DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+        influx bucket create --skip-verify --name node_telemetry --retention 30d --org $DOCKER_INFLUXDB_INIT_ORG --host http://influxdb:8086 --token $DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+        influx bucket create --skip-verify --name default --retention 7d --org $DOCKER_INFLUXDB_INIT_ORG --host http://influxdb:8086 --token $DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+        "
+      depends_on:
+        - influxdb
+
+  grafana:
+    image: grafana/grafana:10.0.0
+    environment:
+      - DOCKER_INFLUXDB_INIT_ORG=$DOCKER_INFLUXDB_INIT_ORG
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=$DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+      - GRAFANA_INFLUXDB_DEFAULT_BUCKET=cisco_mdt
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana:rw
+      - $CONFIG_PATH/influx/grafana/provisioning/:/etc/grafana/provisioning/:ro
+      - $CONFIG_PATH/influx/grafana/dashboards/:/var/lib/grafana/dashboards/:ro
+
+volumes:
+  influxdb2_data: {}
+  grafana_data: {}
